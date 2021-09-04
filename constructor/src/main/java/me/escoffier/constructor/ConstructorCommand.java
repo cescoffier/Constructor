@@ -1,6 +1,5 @@
 package me.escoffier.constructor;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jboss.logging.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -8,10 +7,11 @@ import picocli.CommandLine.Parameters;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(name = "constructor", mixinStandardHelpOptions = true)
-public class ConstructorCommand implements Runnable {
+public class ConstructorCommand implements Callable<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger("Constructor");
 
@@ -29,7 +29,7 @@ public class ConstructorCommand implements Runnable {
     @Inject StepExecutor executor;
 
     @Override
-    public void run() {
+    public Integer call() {
         LOGGER.infof("Reading descriptor %s", file.getAbsolutePath());
         // Read descriptor
         Pipeline pipeline = yaml.read(file);
@@ -44,10 +44,13 @@ public class ConstructorCommand implements Runnable {
             try {
                 executor.execute(task.incrementAndGet(), step);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error("Construction failed", e);
+                return -1;
             }
         }
 
+        LOGGER.info("Construction completed successfully");
+        return 0;
     }
 
 
