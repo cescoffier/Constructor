@@ -1,0 +1,27 @@
+---
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull-request:
+
+jobs:
+  build-constructor:
+    runs-on: ubuntu-20.04
+    name: Build Constructor
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: maven-java-11
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        name: set up jdk 11
+        with:
+          distribution: temurin
+          java-version: 11
+      - name: Build Constructor
+        run: mvn -f constructor/pom.xml -s maven-ci-settings.xml -B clean verify
+      - name: Run Pipeline
+        run: java -jar constructor/target/quarkus-app/quarkus-run.jar
