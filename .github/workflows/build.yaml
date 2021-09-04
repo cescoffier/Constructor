@@ -21,6 +21,6 @@ jobs:
           distribution: temurin
           java-version: 11
       - name: Build Constructor
-        run: mvn -f constructor/pom.xml -s maven-ci-settings.xml -B clean verify
+        run: mvn -f constructor/pom.xml -s maven-settings.xml -B clean verify
       - name: Run Pipeline
         run: java -jar constructor/target/quarkus-app/quarkus-run.jar

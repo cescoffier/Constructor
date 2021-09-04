@@ -6,8 +6,6 @@ import org.zeroturnaround.exec.stream.LogOutputStream;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
 
 @ApplicationScoped
 public class Process {
@@ -15,25 +13,10 @@ public class Process {
     private static final Logger LOGGER = Logger.getLogger("Process");
 
     public void execute(String taskId, File wd, String... commands) {
+        LOGGER.infof("Executing task %s : %s", taskId, String.join(" ", commands));
         File log = new File(wd, taskId + ".log");
         try (FileOutputStream fos = new FileOutputStream(log)) {
-            int res = new ProcessExecutor()
-                    .directory(wd)
-                    .readOutput(true)
-                    .redirectOutput(new LogOutputStream() {
-                        @Override
-                        protected void processLine(String s) {
-                            LOGGER.infof("[%s] - %s", taskId, s);
-                        }
-                    })
-                    .redirectOutputAlsoTo(fos)
-                    .redirectError(new LogOutputStream() {
-                        @Override
-                        protected void processLine(String s) {
-                            LOGGER.warnf("[%s] - %s", taskId, s);
-                        }
-                    })
-                    .redirectErrorAlsoTo(fos)
+            int res = initExecutor(taskId, wd, fos)
                     .command(commands)
                     .execute()
                     .getExitValue();
@@ -46,26 +29,31 @@ public class Process {
         }
     }
 
+    private ProcessExecutor initExecutor(String taskId, File wd, FileOutputStream fos) {
+        return new ProcessExecutor()
+                .directory(wd)
+                .readOutput(true)
+                .redirectOutput(new LogOutputStream() {
+                    @Override
+                    protected void processLine(String s) {
+                        LOGGER.infof("[%s] - %s", taskId, s);
+                    }
+                })
+                .redirectOutputAlsoTo(fos)
+                .redirectError(new LogOutputStream() {
+                    @Override
+                    protected void processLine(String s) {
+                        LOGGER.warnf("[%s] - %s", taskId, s);
+                    }
+                })
+                .redirectErrorAlsoTo(fos);
+    }
+
     public void splitAndExecute(String taskId, File wd, String command) {
+        LOGGER.infof("Executing task %s : %s", taskId, command);
         File log = new File(wd, taskId + ".log");
         try (FileOutputStream fos = new FileOutputStream(log)) {
-            int res = new ProcessExecutor()
-                    .directory(wd)
-                    .readOutput(true)
-                    .redirectOutput(new LogOutputStream() {
-                        @Override
-                        protected void processLine(String s) {
-                            LOGGER.infof("[%s] - %s", taskId, s);
-                        }
-                    })
-                    .redirectOutputAlsoTo(fos)
-                    .redirectError(new LogOutputStream() {
-                        @Override
-                        protected void processLine(String s) {
-                            LOGGER.warnf("[%s] - %s", taskId, s);
-                        }
-                    })
-                    .redirectErrorAlsoTo(fos)
+            int res = initExecutor(taskId, wd, fos)
                     .commandSplit(command)
                     .execute()
                     .getExitValue();

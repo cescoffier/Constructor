@@ -60,6 +60,10 @@ public class StepExecutor {
             command += " -DskipTests -DskipITs";
         }
         command += " -Dmaven.repo.local=" + local.getAbsolutePath();
+        File settings = new File("maven-settings.xml");
+        if (settings.isFile()) {
+            command += " -s " + settings.getAbsolutePath();
+        }
         String ti = getTaskId(id, 3);
         try {
             process.splitAndExecute(ti + "-build", out, command);
