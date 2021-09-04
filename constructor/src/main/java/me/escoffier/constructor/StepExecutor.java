@@ -96,7 +96,9 @@ public class StepExecutor {
         var url = "https://github.com/" + repo;
         String ti = getTaskId(id, 0);
         process.execute(ti + "-clone-" + toFileName(repo), work, "git", "clone", url, out.getName());
-        process.execute(ti + "-checkout", out, "git", "checkout", branchOrCommit);
+        if (branchOrCommit != null) {
+            process.execute(ti + "-checkout", out, "git", "checkout", branchOrCommit);
+        }
     }
 
     private String getTaskId(int id, int task) {
