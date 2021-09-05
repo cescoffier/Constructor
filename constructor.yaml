@@ -1,4 +1,3 @@
-skipTests: true
 versions:
   vertx: 4.2.0.Beta1
 steps:
@@ -29,9 +28,13 @@ steps:
     dependencies:
       vertx.version: vertx
       "smallrye-vertx-mutiny-clients.version": smallrye/smallrye-mutiny-vertx-bindings
+    commands:
+      - mvn clean install -DskipTests
   - repository: quarkusio/quarkus-http
     branchOrCommit: main
     version: 4.1.2-SNAPSHOT
+    commands:
+      - mvn clean install -DskipTests
     dependencies:
       vertx.version: vertx
   - repository: quarkusio/quarkus
