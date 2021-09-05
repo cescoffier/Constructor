@@ -37,8 +37,8 @@ steps:
       - mvn clean install -DskipTests
     dependencies:
       vertx.version: vertx
-  - repository: quarkusio/quarkus
-    branchOrCommit: main
+  - repository: cescoffier/quarkus
+    branchOrCommit: vertx-4.2.0.beta1-integration
     version: 999-SNAPSHOT
     dependencies:
       vertx.version: vertx
