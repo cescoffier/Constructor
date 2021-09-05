@@ -24,3 +24,11 @@ jobs:
         run: mvn -f constructor/pom.xml -B clean verify
       - name: Run Pipeline
         run: java -jar constructor/target/quarkus-app/quarkus-run.jar
+      - name: Zip condtruction directory
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: construction-work
+          path: |
+            construction-work
+            !construction-work/**/target/*
