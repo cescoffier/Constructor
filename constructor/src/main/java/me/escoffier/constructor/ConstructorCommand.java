@@ -43,9 +43,9 @@ public class ConstructorCommand implements Callable<Integer> {
         for (Step step : pipeline.steps) {
             try {
                 executor.execute(task.incrementAndGet(), step);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 LOGGER.error("Construction failed", e);
-                return -1;
+                throw e;
             }
         }
 

@@ -36,7 +36,7 @@ public class StepExecutor {
     }
 
 
-    public void execute(int id, Step step) throws Exception {
+    public void execute(int id, Step step) {
         LOGGER.infof("Executing step for %s", step.repository);
         var out = new File(work, toFileName(step.repository));
         delete(out);
