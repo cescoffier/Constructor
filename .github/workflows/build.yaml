@@ -20,6 +20,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
+      - name: Give me some space
+        run: |
+          time docker rmi node:10 node:12 mcr.microsoft.com/azure-pipelines/node8-typescript:latest
+          time sudo rm -rf /usr/share/dotnet
+          time sudo rm -rf /usr/share/swift          
       - name: Build Constructor
         run: mvn -f constructor/pom.xml -B clean verify
       - name: Run Pipeline
