@@ -83,10 +83,10 @@ public class StepExecutor {
             String ti = getTaskId(id, 2);
             if (entry.getKey().contains(":")) {
                 LOGGER.infof("Setting version for dependency %s to %s", entry.getKey(), resolved);
-                process.execute(ti + "-update-project", out, "mvn", "versions:use-dep-version", "-Dincludes=" + entry.getKey(), "-DdepVersion=" + resolved, "-DforceVersion=true");
+                process.execute(ti + "-update-project", out, "mvn", "versions:use-dep-version", "-Dincludes=" + entry.getKey(), "-DdepVersion=" + resolved, "-DforceVersion=true", "-Dmaven.repo.local=" + local.getAbsolutePath());
             } else {
                 LOGGER.infof("Setting version into variable %s to %s", entry.getKey(), resolved);
-                process.execute(ti + "-update-project", out, "mvn", "versions:set-property", "-Dproperty=" + entry.getKey(), "-DnewVersion=" + resolved);
+                process.execute(ti + "-update-project", out, "mvn", "versions:set-property", "-Dproperty=" + entry.getKey(), "-DnewVersion=" + resolved, "-Dmaven.repo.local=" + local.getAbsolutePath());
             }
         }
     }

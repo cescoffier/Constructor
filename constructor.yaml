@@ -46,5 +46,4 @@ steps:
       "smallrye-mutiny-vertx-binding.version": smallrye/smallrye-mutiny-vertx-bindings
     commands:
       - mvn clean install -Dquickly
-      - mvn -e -B --fail-at-end install -Dsurefire.timeout=1200 -pl !integration-tests/gradle -pl !integration-tests/maven -pl !integration-tests/devtools -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60
-      -
+      - mvn -e -B --fail-at-end install -Dsurefire.timeout=1200 -pl !integration-tests/gradle -pl !integration-tests/maven -pl !integration-tests/devtools -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60    
