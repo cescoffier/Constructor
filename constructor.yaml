@@ -46,4 +46,9 @@ steps:
       "smallrye-mutiny-vertx-binding.version": smallrye/smallrye-mutiny-vertx-bindings
     commands:
       - mvn clean install -Dquickly
-      - mvn -e -B --fail-at-end install -Dsurefire.timeout=1200 -pl !integration-tests/gradle -pl !integration-tests/maven -pl !integration-tests/devtools -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60    
+      - mvn clean install -pl extensions/vertx-core -pl extensions/vertx-http -pl extensions/vertx -pl extensions/vertx-web -pl extensions/vertx-graphql
+      - mvn clean install -pl extensions/grpc-common -pl extensions/grpc
+      - mvn clean install -pl extensions/smallrye-reactive-messaging-kafka -pl extensions/smallrye-reactive-messaging -pl extensions/smallrye-reactive-messaging-amqp -pl extensions/smallrye-reactive-messaging-mqtt -pl extensions/reactive-messaging-http
+      - mvn clean install -pl extensions/reactive-pg-client -pl extensions/reactive-mysql-client -pl extensions/reactive-mssql-client -pl extensions/reactive-db2-client -pl extensions/reactive-datasource
+      - mvn --fail-at-end install -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/reactive-messaging-kafka
+#      - mvn -e -B --fail-at-end install -Dsurefire.timeout=1200 -pl !integration-tests/gradle -pl !integration-tests/maven -pl !integration-tests/devtools -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60
