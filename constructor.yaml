@@ -46,10 +46,23 @@ steps:
       "smallrye-mutiny-vertx-binding.version": smallrye/smallrye-mutiny-vertx-bindings
     commands:
       - mvn clean install -Dquickly
-      - mvn install -pl extensions/vertx-core -pl extensions/vertx-http -pl extensions/vertx -pl extensions/vertx-web -pl extensions/vertx-graphql
-      - mvn install -pl extensions/grpc-common -pl extensions/grpc
-      - mvn install -pl extensions/smallrye-reactive-messaging-kafka -pl extensions/smallrye-reactive-messaging -pl extensions/smallrye-reactive-messaging-amqp -pl extensions/smallrye-reactive-messaging-mqtt -pl extensions/reactive-messaging-http
-      - mvn install -pl extensions/reactive-pg-client -pl extensions/reactive-mysql-client -pl extensions/reactive-mssql-client -pl extensions/reactive-db2-client -pl extensions/reactive-datasource
+      - mvn install -f extensions/vertx-core
+      - mvn install -f extensions/vertx-http
+      - mvn install -f extensions/vertx
+      - mvn install -f extensions/vertx-web
+      - mvn install -f extensions/vertx-graphql
+      - mvn install -f extensions/grpc-common
+      - mvn install -f extensions/grpc
+      - mvn install -f extensions/smallrye-reactive-messaging-kafka
+      - mvn install -f extensions/smallrye-reactive-messaging
+      - mvn install -f extensions/smallrye-reactive-messaging-amqp
+      - mvn install -f extensions/smallrye-reactive-messaging-mqtt
+      - mvn install -f extensions/reactive-messaging-http
+      - mvn install -f extensions/reactive-pg-client
+      - mvn install -f extensions/reactive-mysql-client
+      - mvn install -f extensions/reactive-mssql-client
+      - mvn install -f extensions/reactive-db2-client
+      - mvn install -f extensions/reactive-datasource
       - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/vertx -pl integration-tests/vertx-http -pl integration-tests/vertx-graphql -pl integration-tests/vertx-web -pl integration-tests/vertx-web-jackson
       - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/reactive-messaging-kafka -pl integration-tests/reactive-messaging-amqp -pl integration-tests/reactive-messaging-http
       - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/grpc-plain-text-mutiny -pl integration-tests/grpc-streaming -pl integration-tests/grpc-mutual-auth -pl integration-tests/grpc-plain-text-gzip -pl integration-tests/grpc-hibernate-reactive -pl integration-tests/grpc-hibernate -pl integration-tests/grpc-health
