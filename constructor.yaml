@@ -1,5 +1,5 @@
 versions:
-  vertx: 4.2.0.Beta1
+  vertx: 4.1.4
 steps:
 #  - repository: eclipse-vertx/vert.x
 #    branchOrCommit: master
@@ -17,7 +17,7 @@ steps:
 #    branchOrCommit: master
 #    version: 4.2.0-SNAPSHOT
   - repository: smallrye/smallrye-mutiny-vertx-bindings
-    branchOrCommit: vertx.4.2.0.Beta1
+    branchOrCommit: main
     version: 2.14.0-SNAPSHOT
     commands:
       - mvn clean install
@@ -37,8 +37,8 @@ steps:
       - mvn clean install -DskipTests
     dependencies:
       vertx.version: vertx
-  - repository: cescoffier/quarkus
-    branchOrCommit: vertx-4.2.0.beta1-integration
+  - repository: quarkusio/quarkus
+    branchOrCommit: main
     version: 999-SNAPSHOT
     dependencies:
       vertx.version: vertx
