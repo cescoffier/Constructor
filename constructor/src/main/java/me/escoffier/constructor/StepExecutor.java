@@ -32,7 +32,11 @@ public class StepExecutor {
         this.references = new HashMap<>();
         LOGGER.infof("Initializing pipeline, %d steps", pipeline.steps.size());
         this.references.putAll(this.pipeline.versions);
-        this.pipeline.steps.forEach(s -> this.references.put(s.repository, s.version));
+        this.pipeline.steps.forEach(s -> {
+            if (s.version != null) {
+                this.references.put(s.repository, s.version);
+            }
+        });
     }
 
 
@@ -52,7 +56,16 @@ public class StepExecutor {
         step.commands.forEach(command -> {
             executeBuildCommand(id, step, out, command);
         });
+
+        // Step 4 - Get version if not set
+        if (step.version == null) {
+            String version = extractVersion(id, step, out);
+            LOGGER.infof("Extracted version for %s: %s", step.repository, version);
+            references.put(step.repository, version);
+        }
     }
+
+
 
     private void executeBuildCommand(int id, Step step, File out, String command) {
         LOGGER.infof("Executing build command for %s : %s", step.repository, command);
@@ -89,6 +102,11 @@ public class StepExecutor {
                 process.execute(ti + "-update-project", out, "mvn", "versions:set-property", "-Dproperty=" + entry.getKey(), "-DnewVersion=" + resolved, "-Dmaven.repo.local=" + local.getAbsolutePath());
             }
         }
+    }
+
+    private String extractVersion(int id, Step step, File out) {
+        String ti = getTaskId(id, 4);
+        return process.executeAndReturn(ti + "-extract-version", out, "mvn", "-q", "-Dexec.executable=echo", "-Dexec.args='${project.version}'", "-N", "org.codehaus.mojo:exec-maven-plugin:3.0.0:exec");
     }
 
     private void clone(int id, File out, String repo, String branchOrCommit) {

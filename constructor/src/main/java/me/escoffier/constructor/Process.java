@@ -29,6 +29,20 @@ public class Process {
         }
     }
 
+    public String executeAndReturn(String taskId, File wd, String... commands) {
+        LOGGER.infof("Executing task %s : %s", taskId, String.join(" ", commands));
+        File log = new File(wd, taskId + ".log");
+        try (FileOutputStream fos = new FileOutputStream(log)) {
+            return initExecutor(taskId, wd, fos)
+                    .command(commands)
+                    .execute()
+                    .getOutput().getUTF8();
+        } catch (Exception e) {
+            LOGGER.errorf("Unable to executed `%s`", String.join(" ", commands), e);
+            throw new RuntimeException(e);
+        }
+    }
+
     private ProcessExecutor initExecutor(String taskId, File wd, FileOutputStream fos) {
         return new ProcessExecutor()
                 .directory(wd)
