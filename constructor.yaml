@@ -44,7 +44,7 @@ steps:
     commands:
       - mvn clean install -Dquickly
       - mvn install -f extensions/vertx
-      - mvn install -f extensions/vertx-http
+      - mvn install -f extensions/vertx-http -DskipTests
       - mvn install -f extensions/reactive-routes
       - mvn install -f extensions/vertx-graphql
       - mvn install -f extensions/grpc-common
