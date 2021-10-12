@@ -11,13 +11,24 @@ import java.io.IOException;
 @ApplicationScoped
 public class Yaml {
 
-    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());;
+    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     public ObjectMapper mapper() {
         return mapper;
     }
 
-    public Pipeline read(File file) {
+    public Build readBuild(File file) {
+        if (! file.isFile()) {
+            throw new RuntimeException("The file " + file.getAbsolutePath() + " does not exist");
+        }
+        try {
+            return mapper().readerFor(Build.class).readValue(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to read the build file", e);
+        }
+    }
+
+    public Pipeline readPipeline(File file) {
         if (! file.isFile()) {
             throw new RuntimeException("The file " + file.getAbsolutePath() + " does not exist");
         }

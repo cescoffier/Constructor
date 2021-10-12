@@ -2,45 +2,90 @@ package me.escoffier.constructor;
 
 
 import org.jboss.logging.Logger;
-import org.zeroturnaround.exec.ProcessExecutor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ApplicationScoped
-public class StepExecutor {
+public class BuildExecutor {
+
+    final static AtomicInteger id = new AtomicInteger();
 
     @Inject
     Process process;
 
-    private Pipeline pipeline;
+    @Inject
+    Yaml yaml;
+
+    private Build build;
     private File local;
     private File work;
 
     private static final Logger LOGGER = Logger.getLogger("StepExecutor");
-    private Map<String, String> references;
+    private Map<String, String> versions;
+    private Map<String, String> variables;
+    private File buildFileDirectory;
+    private Report report;
 
-    public void init(Pipeline pipeline, File localRepository, File workDirectory) {
-        this.pipeline = pipeline;
+    public void init(Build build, File buildFileDirectory, File localRepository, File workDirectory) {
+        this.build = build;
+        this.report = build.report;
         this.local = localRepository;
         this.work = workDirectory;
-        this.references = new HashMap<>();
-        LOGGER.infof("Initializing pipeline, %d steps", pipeline.steps.size());
-        this.references.putAll(this.pipeline.versions);
-        this.pipeline.steps.forEach(s -> {
-            if (s.version != null) {
-                this.references.put(s.repository, s.version);
-            }
-        });
+        this.buildFileDirectory = buildFileDirectory;
+        this.versions = new HashMap<>(build.versions);
+        this.variables = new HashMap<>(build.variables);
+
+        importPipelines(build);
+
+        int numberOfPipelines = this.build.pipelines.size();
+        long numberOfSteps = this.build.pipelines.stream().map(p -> p.steps.size()).mapToInt(i -> i).sum();
+
+        LOGGER.infof("Initializing build: %d pipelines, %d steps", numberOfPipelines, numberOfSteps);
+
+        //this.versions.putAll(this.pipeline.versions); // TODO Local version
+        for (Pipeline pipeline : this.build.pipelines) {
+            pipeline.steps.forEach(s -> {
+                if (s.version != null) {
+                    this.versions.put(s.repository, s.version);
+                }
+            });
+        }
     }
 
+    private void importPipelines(Build build) {
+        for (Pipeline pipeline : build.pipelines) {
+            if (pipeline.file != null) {
+                File file = new File(buildFileDirectory, pipeline.file);
+                Pipeline p = yaml.readPipeline(file);
+                pipeline.steps = p.steps;
+                pipeline.skipTests = p.skipTests;
+            }
+        }
+    }
 
-    public void execute(int id, Step step) {
+    public void executePipeline(Pipeline pipeline) {
+        report.beginPipeline(pipeline);
+        for (Step step : pipeline.steps) {
+            report.beginStep(pipeline, step);
+            LOGGER.infof("Building %s from pipeline %s", step.repository, pipeline.name);
+            try {
+                buildStep(id.getAndIncrement(), pipeline, step);
+                report.completedStep(pipeline, step);
+            } catch (Exception e) {
+                report.failedStep(pipeline, step, e);
+                report.failedPipeline(pipeline);
+                return;
+            }
+        }
+        report.completedPipeline(pipeline);
+    }
+
+    public void buildStep(int id, Pipeline pipeline, Step step) {
         LOGGER.infof("Executing step for %s", step.repository);
         var out = new File(work, toFileName(step.repository));
         delete(out);
@@ -53,21 +98,21 @@ public class StepExecutor {
         updateProject(id, out, step.dependencies);
 
         // Step 3 - Execute commands
-        step.commands.forEach(command -> {
-            executeBuildCommand(id, step, out, command);
-        });
+        step.commands.forEach(command -> executeBuildCommand(id, step, pipeline, out, command));
 
         // Step 4 - Get version if not set
         if (step.version == null) {
             String version = extractVersion(id, step, out);
             LOGGER.infof("Extracted version for %s: %s", step.repository, version);
-            references.put(step.repository, version);
+            versions.put(step.repository, version);
+        } else {
+            versions.put(step.repository, step.version);
         }
     }
 
 
 
-    private void executeBuildCommand(int id, Step step, File out, String command) {
+    private void executeBuildCommand(int id, Step step, Pipeline pipeline, File out, String command) {
         LOGGER.infof("Executing build command for %s : %s", step.repository, command);
         if (!command.contains("-DskipTests") && pipeline.skipTests) {
             command += " -DskipTests -DskipITs";
@@ -87,9 +132,9 @@ public class StepExecutor {
 
     private void updateProject(int id, File out, Map<String, String> dependencies) {
         for (Map.Entry<String, String> entry : dependencies.entrySet()) {
-            String resolved = references.get(entry.getValue());
+            String resolved = versions.get(entry.getValue());
             if (resolved == null) {
-                LOGGER.errorf("Cannot resolve reference to %s (%s). The project is not declared in the pipeline. Only %s are declared", entry.getKey(), entry.getValue(), references.keySet());
+                LOGGER.errorf("Cannot resolve reference to %s (%s). The project is not declared in the pipeline. Only %s are declared", entry.getKey(), entry.getValue(), versions.keySet());
                 throw new RuntimeException("Unable to resolve reference to " + entry.getValue());
             }
 
@@ -138,4 +183,10 @@ public class StepExecutor {
         file.delete();
     }
 
+    public void go() {
+        for (Pipeline pipeline : build.pipelines) {
+            LOGGER.infof("Executing pipeline %s", pipeline.name);
+            executePipeline(pipeline);
+        }
+    }
 }

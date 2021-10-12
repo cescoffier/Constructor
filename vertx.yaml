@@ -1,0 +1,22 @@
+name: vert.x
+steps:
+ - repository: eclipse-vertx/vert.x
+   branchOrCommit: master
+   commands:
+        - mvn clean install -DskipTests
+ - repository: vert-x3/vertx-codegen
+   branchOrCommit: master
+   commands:
+        - mvn clean install
+ - repository: vert-x3/vertx-mail-client
+   branchOrCommit: master
+   commands:
+        - mvn clean install
+ - repository: vert-x3/vertx-auth
+   branchOrCommit: master
+   commands:
+        - mvn clean install
+ - repository: vert-x3/vertx-web
+   branchOrCommit: master
+   commands:
+        - mvn clean install

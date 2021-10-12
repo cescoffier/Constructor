@@ -6,12 +6,12 @@ import java.util.Map;
 
 public class Pipeline {
 
+    public String name;
+
     public boolean skipTests;
 
     public List<Step> steps = Collections.emptyList();
 
-    public Map<String, String> versions = Collections.emptyMap();
-
-
+    public String file;
 
 }
