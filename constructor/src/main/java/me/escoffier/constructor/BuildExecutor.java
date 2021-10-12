@@ -68,7 +68,7 @@ public class BuildExecutor {
         }
     }
 
-    public void executePipeline(Pipeline pipeline) {
+    public boolean executePipeline(Pipeline pipeline) {
         report.beginPipeline(pipeline);
         for (Step step : pipeline.steps) {
             report.beginStep(pipeline, step);
@@ -79,10 +79,11 @@ public class BuildExecutor {
             } catch (Exception e) {
                 report.failedStep(pipeline, step, e);
                 report.failedPipeline(pipeline);
-                return;
+                return false;
             }
         }
         report.completedPipeline(pipeline);
+        return true;
     }
 
     public void buildStep(int id, Pipeline pipeline, Step step) {
@@ -183,10 +184,12 @@ public class BuildExecutor {
         file.delete();
     }
 
-    public void go() {
+    public boolean go() {
+        boolean completed = true;
         for (Pipeline pipeline : build.pipelines) {
             LOGGER.infof("Executing pipeline %s", pipeline.name);
-            executePipeline(pipeline);
+            completed = completed  && executePipeline(pipeline);
         }
+        return completed;
     }
 }

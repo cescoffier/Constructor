@@ -40,14 +40,19 @@ public class ConstructorCommand implements Callable<Integer> {
         work.mkdirs();
 
         executor.init(build, file.getParentFile(), repo, work);
-        executor.go();
+        boolean completed = executor.go();
 
         build.report.write(file.getParentFile());
 
         zip();
 
-        LOGGER.info("Construction completed successfully");
-        return 0;
+        if (completed) {
+            LOGGER.info("Construction completed successfully");
+            return 0;
+        } else {
+            throw new RuntimeException("Construction failed");
+        }
+
     }
 
     private void zip() throws IOException {
