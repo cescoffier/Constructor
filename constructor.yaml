@@ -1,8 +1,8 @@
 versions:
   vertx: 4.2.0.Beta1
 pipelines:  
-  - name: vert.x
-    file: vertx.yaml
+  # - name: vert.x
+  #   file: vertx.yaml
   - name: main-build
     steps:
     - repository: smallrye/smallrye-mutiny-vertx-bindings
