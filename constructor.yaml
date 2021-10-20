@@ -1,5 +1,5 @@
 versions:
-  vertx: 4.2.0.Beta1
+  vertx: 4.2.0.CR1
 pipelines:  
   # - name: vert.x
   #   file: vertx.yaml
@@ -53,4 +53,4 @@ pipelines:
         - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/rest-client-reactive  -pl integration-tests/rest-client-reactive-multipart
         - mvn verify -Dtest-containers -Dstart-containers -Dquarkus.native.native-image-xmx=5g -Dnative -Dnative.surefire.skip -Dformat.skip -Dno-descriptor-tests -DskipDoc -pl integration-tests/vertx -pl integration-tests/vertx-http -pl integration-tests/vertx-web -pl integration-tests/vertx-web-jackson -pl integration-tests/vertx-graphql
         - mvn install -f extensions/vertx-http
-        
+
