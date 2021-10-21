@@ -17,8 +17,8 @@ pipelines:
         "smallrye-vertx-mutiny-clients.version": smallrye/smallrye-mutiny-vertx-bindings
       commands:
         - mvn clean install -DskipTests
-    - repository: quarkusio/quarkus-http
-      branchOrCommit: main
+    - repository: cescoffier/quarkus-http
+      branchOrCommit: vertx-4.2.0-integration
       commands:
         - mvn clean install -DskipTests
       dependencies:
