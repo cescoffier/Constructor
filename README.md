@@ -18,38 +18,71 @@ For example:
 ```yaml
 versions:
   vertx: 4.2.0.Beta1
-steps:
-  - repository: smallrye/smallrye-mutiny-vertx-bindings
-    branchOrCommit: vertx.4.2.0.Beta1
-    version: 2.14.0-SNAPSHOT
-    commands:
-      - mvn clean install
-    dependencies:
-       vertx.version: vertx
-  - repository: smallrye/smallrye-reactive-messaging
-    branchOrCommit: main
-    version: 3.10.0-SNAPSHOT
-    dependencies:
-      vertx.version: vertx
-      "smallrye-vertx-mutiny-clients.version": smallrye/smallrye-mutiny-vertx-bindings
-  - repository: quarkusio/quarkus-http
-    branchOrCommit: main
-    version: 4.1.2-SNAPSHOT
-    dependencies:
-      vertx.version: vertx
-  - repository: quarkusio/quarkus
-    branchOrCommit: main
-    version: 999-SNAPSHOT
-    dependencies:
-      vertx.version: vertx
-      "smallrye-reactive-messaging.version": smallrye/smallrye-reactive-messaging
-      "smallrye-mutiny-vertx-binding.version": smallrye/smallrye-mutiny-vertx-bindings
-    commands:
-      - mvn clean install -Dquickly
+pipelines:
+  - name: main-build
+      - repository: smallrye/smallrye-mutiny-vertx-bindings
+        branchOrCommit: vertx.4.2.0.Beta1
+        version: 2.14.0-SNAPSHOT
+        commands:
+          - mvn clean install
+        dependencies:
+           vertx.version: vertx
+      - repository: smallrye/smallrye-reactive-messaging
+        branchOrCommit: main
+        version: 3.10.0-SNAPSHOT
+        dependencies:
+          vertx.version: vertx
+          "smallrye-vertx-mutiny-clients.version": smallrye/smallrye-mutiny-vertx-bindings
+      - repository: quarkusio/quarkus-http
+        branchOrCommit: main
+        version: 4.1.2-SNAPSHOT
+        dependencies:
+          vertx.version: vertx
+      - repository: quarkusio/quarkus
+        branchOrCommit: main
+        version: 999-SNAPSHOT
+        dependencies:
+          vertx.version: vertx
+          "smallrye-reactive-messaging.version": smallrye/smallrye-reactive-messaging
+          "smallrye-mutiny-vertx-binding.version": smallrye/smallrye-mutiny-vertx-bindings
+        commands:
+          - mvn clean install -Dquickly
 ```
+
+### Versions
 
 `version` is a dictionary containing `name -> version pair`. 
 These entries will be used to resolve versions in the projects.
+
+### Pipelines
+
+`pipelines` is the set of _pipeline_ (ordered group of steps) you want to build.
+A pipeline has a name, and can have either a set of steps, or a stored in an external file.
+In that case, import is as follows:
+
+```yaml
+pipelines:  
+   - name: vert.x
+     file: vertx.yaml
+   - name: main
+     steps: #... 
+```
+
+The imported pipeline is just a set of steps:
+
+```yaml
+name: vert.x
+steps:
+ - repository: eclipse-vertx/vert.x
+   branchOrCommit: master
+   commands:
+        - mvn clean install -DskipTests
+  #...
+```
+
+The imported file path is resolved relatively from the main constructor file.
+
+### Steps (projects)
 
 `steps` is the list of project to build in the pipeline.
 The order matters as constructor builds them in this order.
@@ -68,7 +101,7 @@ The key is either the name of a variable used in the project's pom.xml file or t
 The value is either the name of a repository or a key from the global `versions` dictionary. 
 Constructor resolves each entry and adapts the project's `pom.xml`.
 
-### The CLI
+## The CLI
 
 The constructor CLI is a Quarkus application.
 
