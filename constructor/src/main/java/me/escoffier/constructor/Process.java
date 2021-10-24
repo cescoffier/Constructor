@@ -50,17 +50,30 @@ public class Process {
                 .redirectOutput(new LogOutputStream() {
                     @Override
                     protected void processLine(String s) {
-                        LOGGER.infof("[%s] - %s", taskId, s);
+                        if (! filteredOut(s)) {
+                            LOGGER.infof("[%s] - %s", taskId, s);
+                        }
                     }
                 })
                 .redirectOutputAlsoTo(fos)
                 .redirectError(new LogOutputStream() {
                     @Override
                     protected void processLine(String s) {
-                        LOGGER.warnf("[%s] - %s", taskId, s);
+                        if (! filteredOut(s)) {
+                            LOGGER.warnf("[%s] - %s", taskId, s);
+                        }
                     }
                 })
                 .redirectErrorAlsoTo(fos);
+    }
+
+    private boolean filteredOut(String msg) {
+        return
+                msg.isBlank()
+                || msg.startsWith("Progress (") // Maven progress
+                || msg.startsWith("Downloaded from") // Download result from Maven
+                || msg.startsWith("Downloading from"); // Download message from Maven
+
     }
 
     public void splitAndExecute(String taskId, File wd, String command) {

@@ -13,10 +13,4 @@ public class Build {
 
     public Map<String, String> variables = Collections.emptyMap();
 
-    public final Report report = new Report(this);
-
-    public void dumpReport() {
-
-    }
-
 }

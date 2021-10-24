@@ -33,7 +33,7 @@ jobs:
       - name: Build Constructor
         run: mvn -f constructor/pom.xml -B clean verify
       - name: Run Pipeline
-        run: java -jar constructor/target/quarkus-app/quarkus-run.jar
+        run: java -jar constructor/target/quarkus-app/quarkus-run.jar vertx-to-quarkus.yaml
       - name: Prepare artifact
         if: always()
         uses: actions/upload-artifact@v2

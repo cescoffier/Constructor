@@ -1,5 +1,6 @@
 package me.escoffier.constructor;
 
+import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -7,6 +8,9 @@ import picocli.CommandLine.Parameters;
 
 import javax.inject.Inject;
 import java.io.*;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -20,11 +24,17 @@ public class ConstructorCommand implements Callable<Integer> {
         description = "The constructor build description")
     File file;
 
+    @CommandLine.Option(names = "--clean", description = "Remove the working directory and the local respository before building")
+    boolean clean;
+
     @CommandLine.Option(names = {"--work-dir", "-w"}, description = "The working directory", defaultValue = "construction-work")
     File work;
 
     @CommandLine.Option(names = {"--local-repository", "-r"}, description = "The local repository directory", defaultValue = "repo")
     File repo;
+
+    @CommandLine.Option(names = {"--variables"}, description = "Define a new variable")
+    Map<String, String> variables;
 
     @Inject Yaml yaml;
     @Inject
@@ -32,17 +42,33 @@ public class ConstructorCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws IOException {
-        LOGGER.infof("Reading build file %s", file.getAbsolutePath());
+        LOGGER.infof("Reading file %s", file.getAbsolutePath());
+        Build build;
+        try {
+            build = yaml.readBuild(file);
+        } catch (Exception e) {
+            // Try as pipeline
+            Pipeline pipeline = yaml.readPipeline(file);
+            build = new Build();
+            build.pipelines = Collections.singletonList(pipeline);
+        }
 
-        Build build = yaml.readBuild(file);
+        if (clean) {
+            LOGGER.infof("Deleting %s and %s", repo.getAbsolutePath(), work.getAbsolutePath());
+            FileUtils.deleteQuietly(repo);
+            FileUtils.deleteQuietly(work);
+            FileUtils.deleteQuietly(new File(file.getParentFile(), "constructor.zip"));
+        }
 
+        //noinspection ResultOfMethodCallIgnored
         repo.mkdirs();
+        //noinspection ResultOfMethodCallIgnored
         work.mkdirs();
 
-        executor.init(build, file.getParentFile(), repo, work);
+        executor.init(file, build, file.getParentFile(), repo, work, variables);
         boolean completed = executor.go();
 
-        build.report.write(file.getParentFile());
+        executor.getReport().write(file.getParentFile());
 
         zip();
 
@@ -56,7 +82,7 @@ public class ConstructorCommand implements Callable<Integer> {
     }
 
     private void zip() throws IOException {
-        File out = new File("constructor.zip");
+        File out = new File(file.getParentFile(), "constructor.zip");
         FileOutputStream fos = new FileOutputStream(out);
         ZipOutputStream zipOut = new ZipOutputStream(fos);
 
@@ -83,6 +109,7 @@ public class ConstructorCommand implements Callable<Integer> {
                 zipOut.closeEntry();
             }
             File[] children = file.listFiles();
+            assert children != null;
             for (File childFile : children) {
                 zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
             }

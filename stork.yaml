@@ -1,0 +1,21 @@
+# Build Stork using a custom Vert.x version
+# Expected to be used as follows:
+# java -jar constructor/target/quarkus-app/quarkus-run.jar stork.yaml --variables vertx=4.2.0-SNAPSHOT
+versions:
+  vertx: ${vertx}
+pipelines:
+
+  - name: smallrye stork
+    steps:
+      - repository: smallrye/smallrye-mutiny-vertx-bindings
+        branchOrCommit: vertx.4.2.0.Beta1
+        commands:
+          - mvn clean install -DskipTests
+        dependencies:
+          vertx.version: vertx
+      - repository: smallrye/smallrye-stork
+        dependencies:
+          vertx.version: vertx
+        commands:
+          - mvn clean install
+
