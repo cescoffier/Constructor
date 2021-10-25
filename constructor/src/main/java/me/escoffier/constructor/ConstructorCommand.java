@@ -71,7 +71,7 @@ public class ConstructorCommand implements Callable<Integer> {
         //noinspection ResultOfMethodCallIgnored
         work.mkdirs();
 
-        executor.init(file, build, file.getParentFile(), repo, work, variables);
+        executor.init(file, build, file.getParentFile(), repo, work, variables, resumeFrom);
         boolean completed = executor.go();
 
         if (! skipReport) {
