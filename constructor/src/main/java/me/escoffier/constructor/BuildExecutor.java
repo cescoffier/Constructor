@@ -39,7 +39,7 @@ public class BuildExecutor {
 
     public void init(File file, Build build, File buildFileDirectory, File localRepository, File workDirectory, Map<String, String> variables, String resumeFrom) {
         this.build = build;
-        this.resumeFrom = resumeFrom;
+        this.resumeFrom = resumeFrom == null || resumeFrom.isBlank() ? null : resumeFrom;
         this.report = new Report(file, build);
         this.local = localRepository;
         this.work = workDirectory;
@@ -72,7 +72,7 @@ public class BuildExecutor {
                     .filter(s -> s.repository.equalsIgnoreCase(resumeFrom))
                     .findAny().orElseThrow(() -> new NoSuchElementException("Unable to resume from step " + resumeFrom + " : step not found"));
         }
-        resumed = resumeFrom == null;
+        resumed = this.resumeFrom == null;
 
         for (Pipeline pipeline : this.build.pipelines) {
             pipeline.steps.forEach(s -> {
@@ -121,7 +121,7 @@ public class BuildExecutor {
             resumed = true;
         }
 
-        if (! resumed) {
+        if (resumed) {
             LOGGER.infof("Executing step for %s", repo);
             delete(out);
             // Step 1 - Clone
