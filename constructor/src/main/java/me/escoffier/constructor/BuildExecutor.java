@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -33,9 +34,12 @@ public class BuildExecutor {
     private Map<String, String> variables;
     private File buildFileDirectory;
     private Report report;
+    private String resumeFrom;
+    private boolean resumed;
 
-    public void init(File file, Build build, File buildFileDirectory, File localRepository, File workDirectory, Map<String, String> variables) {
+    public void init(File file, Build build, File buildFileDirectory, File localRepository, File workDirectory, Map<String, String> variables, String resumeFrom) {
         this.build = build;
+        this.resumeFrom = resumeFrom;
         this.report = new Report(file, build);
         this.local = localRepository;
         this.work = workDirectory;
@@ -61,8 +65,14 @@ public class BuildExecutor {
 
         int numberOfPipelines = this.build.pipelines.size();
         long numberOfSteps = this.build.pipelines.stream().map(p -> p.steps.size()).mapToInt(i -> i).sum();
-
         LOGGER.infof("Initializing build: %d pipelines, %d steps", numberOfPipelines, numberOfSteps);
+
+        if (resumeFrom != null) {
+            this.build.pipelines.stream().flatMap(p -> p.steps.stream())
+                    .filter(s -> s.repository.equalsIgnoreCase(resumeFrom))
+                    .findAny().orElseThrow(() -> new NoSuchElementException("Unable to resume from step " + resumeFrom + " : step not found"));
+        }
+        resumed = resumeFrom == null;
 
         for (Pipeline pipeline : this.build.pipelines) {
             pipeline.steps.forEach(s -> {
@@ -105,22 +115,28 @@ public class BuildExecutor {
     public void buildStep(int id, Pipeline pipeline, Step step) {
         String repo = Variables.expand(variables, step.repository);
         String branch = Variables.expand(variables, step.branchOrCommit);
-
-        LOGGER.infof("Executing step for %s", repo);
         var out = new File(work, toFileName(repo));
-        delete(out);
-        // Step 1 - Clone
-        LOGGER.infof("Cloning project %s in %s and switching to branch/commit %s", repo, out.getAbsolutePath(), branch);
-        clone(id, out, repo, branch);
 
-        // Step 2 - Update references
-        LOGGER.infof("Updating project dependencies");
-        updateProject(id, repo, out, step.dependencies);
+        if (! resumed  && step.repository.equalsIgnoreCase(resumeFrom)) {
+            resumed = true;
+        }
 
-        // Step 3 - Execute commands
-        step.commands.forEach(command -> executeBuildCommand(id, repo, pipeline, out, command));
+        if (! resumed) {
+            LOGGER.infof("Executing step for %s", repo);
+            delete(out);
+            // Step 1 - Clone
+            LOGGER.infof("Cloning project %s in %s and switching to branch/commit %s", repo, out.getAbsolutePath(), branch);
+            clone(id, out, repo, branch);
 
-        // Step 4 - Get version if not set
+            // Step 2 - Update references
+            LOGGER.infof("Updating project dependencies");
+            updateProject(id, repo, out, step.dependencies);
+
+            // Step 3 - Execute commands
+            step.commands.forEach(command -> executeBuildCommand(id, repo, pipeline, out, command));
+        }
+
+        // Step 4 - Get version if not set - even if resuming, so we collect versions
         if (step.version == null) {
             String version = extractVersion(id, repo, step, out);
             LOGGER.infof("Extracted version for %s: %s", repo, version);
@@ -129,8 +145,6 @@ public class BuildExecutor {
             versions.put(step.repository, step.version);
         }
     }
-
-
 
     private void executeBuildCommand(int id, String repo, Pipeline pipeline, File out, String command) {
         String expanded = Variables.expand(variables, command);
@@ -232,6 +246,7 @@ public class BuildExecutor {
     public boolean go() {
         boolean completed = true;
         report.begin();
+
         for (Pipeline pipeline : build.pipelines) {
             LOGGER.infof("Executing pipeline %s", pipeline.name);
             completed = completed  && executePipeline(pipeline);

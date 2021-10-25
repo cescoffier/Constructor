@@ -24,14 +24,20 @@ public class ConstructorCommand implements Callable<Integer> {
         description = "The constructor build description")
     File file;
 
-    @CommandLine.Option(names = "--clean", description = "Remove the working directory and the local respository before building")
+    @CommandLine.Option(names = "--clean", description = "Remove the working directory and the local repository before building")
     boolean clean;
+
+    @CommandLine.Option(names = "--skip-report", description = "Do not create the HTML report and zip file when the construction completes")
+    boolean skipReport;
 
     @CommandLine.Option(names = {"--work-dir", "-w"}, description = "The working directory", defaultValue = "construction-work")
     File work;
 
     @CommandLine.Option(names = {"--local-repository", "-r"}, description = "The local repository directory", defaultValue = "repo")
     File repo;
+
+    @CommandLine.Option(names = {"--resume-from", "-rf"}, description = "Resume the build from a specific step. The step is specified using the repository name")
+    String resumeFrom;
 
     @CommandLine.Option(names = {"--variables"}, description = "Define a new variable")
     Map<String, String> variables;
@@ -68,9 +74,10 @@ public class ConstructorCommand implements Callable<Integer> {
         executor.init(file, build, file.getParentFile(), repo, work, variables);
         boolean completed = executor.go();
 
-        executor.getReport().write(file.getParentFile());
-
-        zip();
+        if (! skipReport) {
+            zip();
+            executor.getReport().write(file.getParentFile());
+        }
 
         if (completed) {
             LOGGER.info("Construction completed successfully");
