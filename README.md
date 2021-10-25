@@ -128,6 +128,21 @@ No, you can build any chain, as soon as the projects you need to build are using
 Maven proposes easy ways to update dependencies and variables.
 Check the [maven-versions-plugin](https://www.mojohaus.org/versions-maven-plugin/) for detail.
 
+### How to run my pipeline offline
+
+At the moment you will need to build Constructor on your machine.
+
+```shell
+git clone https://github.com/cescoffier/Constructor constructor
+cd constructor/constructor
+mvn clean package -DskipTests
+```
+
+Then, you can run constructor using:
+
+```shell
+java -jar constructor/target/quarkus-app/quarkus-run.jar <path to the pipeline file>
+```
 
 
 
