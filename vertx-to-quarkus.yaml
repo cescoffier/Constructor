@@ -9,7 +9,8 @@ pipelines:
           - mvn clean install
         dependencies:
           vertx.version: vertx
-      - repository: smallrye/smallrye-reactive-messaging
+      - repository: cescoffier/smallrye-reactive-messaging
+        branchOrCommit: bump-to-vertx-4.2
         dependencies:
           vertx.version: vertx
           "smallrye-vertx-mutiny-clients.version": cescoffier/smallrye-mutiny-vertx-bindings
@@ -33,7 +34,7 @@ pipelines:
         version: 999-SNAPSHOT
         dependencies:
           vertx.version: vertx
-          "smallrye-reactive-messaging.version": smallrye/smallrye-reactive-messaging
+          "smallrye-reactive-messaging.version": cescoffier/smallrye-reactive-messaging
           "smallrye-mutiny-vertx-binding.version": cescoffier/smallrye-mutiny-vertx-bindings
           "quarkus-http.version": cescoffier/quarkus-http
         commands:
