@@ -1,5 +1,5 @@
 versions:
-  - vertx: 4.2.0
+  vertx: 4.2.0
 pipelines:
   - name: smallrye
     steps:

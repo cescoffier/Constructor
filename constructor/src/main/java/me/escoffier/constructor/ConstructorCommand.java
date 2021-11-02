@@ -53,6 +53,7 @@ public class ConstructorCommand implements Callable<Integer> {
         try {
             build = yaml.readBuild(file);
         } catch (Exception e) {
+            e.printStackTrace();
             // Try as pipeline
             Pipeline pipeline = yaml.readPipeline(file);
             build = new Build();
