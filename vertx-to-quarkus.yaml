@@ -6,8 +6,8 @@ pipelines:
 
   - name: smallrye
     steps:
-      - repository: smallrye/smallrye-mutiny-vertx-bindings
-        branchOrCommit: vertx.4.2.0.Beta1
+      - repository: cescoffier/smallrye-mutiny-vertx-bindings
+        branchOrCommit: bump-to-vertx-4.2.0
         commands:
           - mvn clean install
         dependencies:
