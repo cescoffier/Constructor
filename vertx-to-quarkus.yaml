@@ -26,7 +26,7 @@ pipelines:
 
   - name: quarkus
     steps:
-      - repository: smallrye/quarkus-http
+      - repository: quarkusio/quarkus-http
         branchOrCommit: main
         commands:
           - mvn clean install -DskipTests
