@@ -18,7 +18,7 @@ import java.util.concurrent.Callable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-@Command(name = "constructor", mixinStandardHelpOptions = true)
+@Command(name = "build", mixinStandardHelpOptions = true)
 public class BuildCommand implements Callable<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger("Constructor");
