@@ -1,4 +1,4 @@
-package me.escoffier.constructor;
+package me.escoffier.constructor.build;
 
 public class ConstructorException extends RuntimeException {
 

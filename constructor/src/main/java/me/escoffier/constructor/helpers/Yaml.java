@@ -1,8 +1,10 @@
-package me.escoffier.constructor;
+package me.escoffier.constructor.helpers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import me.escoffier.constructor.build.Build;
+import me.escoffier.constructor.build.Pipeline;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;

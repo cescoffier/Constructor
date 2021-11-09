@@ -106,7 +106,7 @@ Constructor resolves each entry and adapts the project's `pom.xml`.
 The constructor CLI is a Quarkus application.
 
 ```
-Usage: constructor [-hV] [-r=<repo>] [-w=<work>] <constructor-file>
+Usage: constructor build [-hV] [-r=<repo>] [-w=<work>] <constructor-file>
       <constructor-file>   The constructor pipeline description
   -h, --help               Show this help message and exit.
   -r, --local-repository=<repo>
@@ -141,7 +141,7 @@ mvn clean package -DskipTests
 Then, you can run constructor using:
 
 ```shell
-java -jar constructor/target/quarkus-app/quarkus-run.jar <path to the pipeline file>
+java -jar constructor/target/quarkus-app/quarkus-run.jar build <path to the pipeline file>
 ```
 
 

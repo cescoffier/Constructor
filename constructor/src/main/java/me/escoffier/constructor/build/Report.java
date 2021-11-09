@@ -1,4 +1,4 @@
-package me.escoffier.constructor;
+package me.escoffier.constructor.build;
 
 import java.io.File;
 import java.io.IOException;

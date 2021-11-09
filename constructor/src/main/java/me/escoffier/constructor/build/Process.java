@@ -1,4 +1,4 @@
-package me.escoffier.constructor;
+package me.escoffier.constructor.build;
 
 import org.jboss.logging.Logger;
 import org.zeroturnaround.exec.ProcessExecutor;

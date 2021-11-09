@@ -8,6 +8,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: '0 2 * * *'
 
 jobs:
   build-constructor:
@@ -33,7 +35,7 @@ jobs:
       - name: Build Constructor
         run: mvn -f constructor/pom.xml -B clean verify
       - name: Run Pipeline
-        run: java -jar constructor/target/quarkus-app/quarkus-run.jar vertx-to-quarkus.yaml
+        run: java -jar constructor/target/quarkus-app/quarkus-run.jar build vertx-to-quarkus.yaml
       - name: Prepare artifact
         if: always()
         uses: actions/upload-artifact@v2
@@ -42,3 +44,14 @@ jobs:
           path: |
             constructor.zip
             report.html
+      - name: Report
+        if: always()
+        shell: bash
+        run: |      
+          java -jar constructor/target/quarkus-app/quarkus-run.jar report \
+            issueNumber=4 \
+            runId=${{ github.run_id }} \
+            status=${{ job.status }} \
+            token=${{ secrets.GH_API }} \
+            issueRepo=${{ github.repository }} \
+            thisRepo=${{ github.repository }}      

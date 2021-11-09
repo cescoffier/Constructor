@@ -1,8 +1,7 @@
-package me.escoffier.constructor;
+package me.escoffier.constructor.build;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class Pipeline {
 
