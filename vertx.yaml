@@ -241,6 +241,3 @@ steps:
     commands:
       - mvn clean install -DskipTests -N
       - mvn clean install -DskipTests -f stack-depchain
-
-
-
