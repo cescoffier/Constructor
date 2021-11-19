@@ -29,7 +29,7 @@ jobs:
       - name: Give me some space
         run: |
           time docker images
-          time docker rmi node:10 node:12 node:10-alpine node:12-alpine node:14 node:14-alpine 
+          time docker rmi node:12 node:12-alpine node:14 node:14-alpine 
           time sudo rm -rf /usr/share/dotnet
           time sudo rm -rf /usr/share/swift          
       - name: Build Constructor
