@@ -11,7 +11,7 @@ pipelines:
         commands:
           - mvn clean install -DskipTests
         dependencies:
-          vertx.version: eclipse-vertx/vert.x
+          vertx.version: vertx
 
       - repository: gsmet/quarkus
         branchOrCommit: main
