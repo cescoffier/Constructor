@@ -6,12 +6,12 @@ versions:
 pipelines:
   - name: quarkus
     steps:
-      - repository: quarkusio/quarkus-http
-        branchOrCommit: main
-        commands:
-          - mvn clean install -DskipTests
-        dependencies:
-          vertx.version: vertx
+#      - repository: quarkusio/quarkus-http
+#        branchOrCommit: main
+#        commands:
+#          - mvn clean install -DskipTests
+#        dependencies:
+#          vertx.version: vertx
 
       - repository: gsmet/quarkus
         branchOrCommit: main
