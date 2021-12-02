@@ -14,8 +14,8 @@ pipelines:
 #          vertx.version: vertx
 
       - repository: gsmet/quarkus
-        branchOrCommit: main
-        version: 2.2.4-backports-1
+        branchOrCommit: 2.2.4-backports-1
+        version: 999-SNAPSHOT
         dependencies:
           vertx.version: vertx
 #          "quarkus-http.version": quarkusio/quarkus-http
