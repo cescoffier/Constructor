@@ -18,7 +18,7 @@ pipelines:
         version: 2.2.4-backports-1
         dependencies:
           vertx.version: vertx
-          "quarkus-http.version": quarkusio/quarkus-http
+#          "quarkus-http.version": quarkusio/quarkus-http
         commands:
           - mvn clean install -Dquickly
           - mvn install -f extensions/vertx
