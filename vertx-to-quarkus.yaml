@@ -45,24 +45,29 @@ pipelines:
           - mvn clean install -Dquickly
           - mvn install -f extensions/vertx
           - mvn install -f extensions/vertx-http
-          - mvn install -f extensions/reactive-routes
           - mvn install -f extensions/vertx-graphql
           - mvn install -f extensions/grpc-common
           - mvn install -f extensions/grpc
+          - mvn install -f extensions/apicurio-registry-avro
+          - mvn install -f extensions/mailer
+          - mvn install -f extensions/mutiny
+          - mvn install -f extensions/netty
+          - mvn install -f extensions/reactive-datasource
+          - mvn install -f extensions/reactive-db2-client
+          - mvn install -f extensions/reactive-mssql-client
+          - mvn install -f extensions/reactive-mysql-client
+          - mvn install -f extensions/reactive-pg-client
+          - mvn install -f extensions/reactive-routes
+          - mvn install -f extensions/redis-client
           - mvn install -f extensions/smallrye-reactive-messaging
           - mvn install -f extensions/smallrye-reactive-messaging-kafka
           - mvn install -f extensions/smallrye-reactive-messaging-amqp
           - mvn install -f extensions/smallrye-reactive-messaging-mqtt
-          - mvn install -f extensions/reactive-messaging-http
-          - mvn install -f extensions/reactive-pg-client
-          - mvn install -f extensions/reactive-mysql-client
-          - mvn install -f extensions/reactive-mssql-client
-          - mvn install -f extensions/reactive-db2-client
-          - mvn install -f extensions/reactive-datasource
-          - mvn install -f extensions/redis-client
-          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/vertx -pl integration-tests/vertx-http -pl integration-tests/vertx-graphql -pl integration-tests/vertx-web -pl integration-tests/vertx-web-jackson
-          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/reactive-messaging-kafka -pl integration-tests/reactive-messaging-amqp -pl integration-tests/reactive-messaging-http
-          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/grpc-plain-text-mutiny -pl integration-tests/grpc-streaming -pl integration-tests/grpc-mutual-auth -pl integration-tests/grpc-plain-text-gzip -pl integration-tests/grpc-hibernate-reactive -pl integration-tests/grpc-hibernate -pl integration-tests/grpc-health
+          - mvn install -f extensions/smallrye-reactive-messaging-rabbitmq
+          - mvn install -f extensions/smallrye-stork
+          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/vertx -pl integration-tests/vertx-http -pl integration-tests/vertx-graphql -pl integration-tests/vertx-web -pl integration-tests/vertx-web-jackson -pl integration-tests/opentelemetry-vertx
+          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/reactive-messaging-kafka -pl integration-tests/reactive-messaging-amqp -pl integration-tests/reactive-messaging-rabbitmq
+          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/grpc-plain-text-mutiny -pl integration-tests/grpc-streaming -pl integration-tests/grpc-mutual-auth -pl integration-tests/grpc-plain-text-gzip -pl integration-tests/grpc-hibernate-reactive -pl integration-tests/grpc-hibernate -pl integration-tests/grpc-health -pl integration-tests/grpc-tls
           - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/rest-client-reactive  -pl integration-tests/rest-client-reactive-multipart
           - mvn verify -Dtest-containers -Dstart-containers -Dquarkus.native.native-image-xmx=5g -Dnative -Dnative.surefire.skip -Dformat.skip -Dno-descriptor-tests -DskipDoc -pl integration-tests/vertx -pl integration-tests/vertx-http -pl integration-tests/vertx-web -pl integration-tests/vertx-web-jackson -pl integration-tests/vertx-graphql
           - mvn verify -Dtest-containers -Dstart-containers -Dquarkus.native.native-image-xmx=5g -Dnative -Dnative.surefire.skip -Dformat.skip -Dno-descriptor-tests -DskipDoc -pl integration-tests/redis-client
