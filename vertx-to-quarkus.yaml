@@ -56,6 +56,7 @@ pipelines:
           - mvn install -f extensions/reactive-db2-client
           - mvn install -f extensions/reactive-mssql-client
           - mvn install -f extensions/reactive-mysql-client
+          - mvn install -f extensions/reactive-oracle-client
           - mvn install -f extensions/reactive-pg-client
           - mvn install -f extensions/reactive-routes
           - mvn install -f extensions/redis-client
@@ -72,4 +73,4 @@ pipelines:
           - mvn verify -Dtest-containers -Dstart-containers -Dquarkus.native.native-image-xmx=5g -Dnative -Dnative.surefire.skip -Dformat.skip -Dno-descriptor-tests -DskipDoc -pl integration-tests/vertx -pl integration-tests/vertx-http -pl integration-tests/vertx-web -pl integration-tests/vertx-web-jackson -pl integration-tests/vertx-graphql
           - mvn verify -Dtest-containers -Dstart-containers -Dquarkus.native.native-image-xmx=5g -Dnative -Dnative.surefire.skip -Dformat.skip -Dno-descriptor-tests -DskipDoc -pl integration-tests/redis-client
           - mvn verify -Dtest-containers -Dstart-containers -Dquarkus.native.native-image-xmx=5g -Dnative -Dnative.surefire.skip -Dformat.skip -Dno-descriptor-tests -DskipDoc -pl integration-tests/reactive-messaging-amqp
-
+          - mvn verify -Dsurefire.timeout=1200 -Dtest-containers -Dstart-containers -Dformat.skip -DskipDocs -Dquarkus.test.hang-detection-timeout=60 -pl integration-tests/reactive-db2-client -pl integration-tests/reactive-mssql-client -pl integration-tests/reactive-mysql-client -pl integration-tests/reactive-oracle-client -pl integration-tests/reactive-pg-client
