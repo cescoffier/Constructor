@@ -6,7 +6,7 @@ steps:
     commands:
       - mvn clean install -DskipTests
 
-  - repository: vert-x3/vertx-codegen
+  - repository: eclipse-vertx/vertx-codegen
     branchOrCommit: master
     commands:
       - mvn clean install -DskipTests
@@ -17,6 +17,11 @@ steps:
       - mvn clean install -DskipTests
 
   - repository: eclipse-vertx/vertx-tracing
+    branchOrCommit: master
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vertx-json-schema
     branchOrCommit: master
     commands:
       - mvn clean install -DskipTests
@@ -233,6 +238,16 @@ steps:
 
   - repository: vert-x3/vertx-junit5
     branchOrCommit: master
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vertx-http-proxy
+    branchOrCommit: main
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vertx-uri-template
+    branchOrCommit: main
     commands:
       - mvn clean install -DskipTests
 
