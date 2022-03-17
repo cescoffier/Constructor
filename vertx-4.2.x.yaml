@@ -1,0 +1,243 @@
+name: vert.x
+steps:
+
+  - repository: vert-x3/vertx-dependencies
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-codegen
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vert.x
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vertx-tracing
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-hazelcast
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-zookeeper
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-unit
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-mail-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-auth
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-web
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-consul-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-mongo-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-cassandra-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-jdbc-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vertx-sql-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-reactive-streams
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-service-proxy
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-service-factory
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-maven-service-factory
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-http-service-factory
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-micrometer-metrics
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-dropwizard-metrics
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-health-check
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-mail-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-redis-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-stomp
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-shell
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-mail-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-proton
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-amqp-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-kafka-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-bridge-common
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-tcp-eventbus-bridge
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-camel-bridge
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-infinispan
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-ignite
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-rabbitmq-client
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-circuit-breaker
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-service-discovery
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-config
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-grpc
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: eclipse-vertx/vertx-http-proxy
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-mqtt
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-lang-groovy
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-lang-kotlin
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-rx
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-junit5
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests
+
+  - repository: vert-x3/vertx-stack
+    branchOrCommit: 4.2
+    commands:
+      - mvn clean install -DskipTests -N
+      - mvn clean install -DskipTests -f stack-depchain
