@@ -7,12 +7,13 @@ pipelines:
 
   - name: smallrye
     steps:
-      - repository: smallrye/smallrye-mutiny-vertx-bindings
-        branchOrCommit: main
+      - repository: cescoffier/smallrye-mutiny-vertx-bindings
+        branchOrCommit: vertx-4.3
         commands:
           - mvn clean install
         dependencies:
           vertx.version: eclipse-vertx/vert.x
+
       - repository: smallrye/smallrye-reactive-messaging
         branchOrCommit: main
         dependencies:
