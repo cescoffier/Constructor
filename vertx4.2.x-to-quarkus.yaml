@@ -14,7 +14,7 @@ pipelines:
         dependencies:
           vertx.version: eclipse-vertx/vert.x
       - repository: smallrye/smallrye-reactive-messaging
-        branchOrCommit: main
+        branchOrCommit: 3.15.0
         dependencies:
           vertx.version: eclipse-vertx/vert.x
           "smallrye-vertx-mutiny-clients.version": smallrye/smallrye-mutiny-vertx-bindings
