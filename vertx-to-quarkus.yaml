@@ -49,7 +49,7 @@ pipelines:
           - mvn install -f extensions/vertx-graphql
           - mvn install -f extensions/grpc-common
           - mvn install -f extensions/grpc
-          - mvn install -f extensions/apicurio-registry-avro
+          - mvn install -f extensions/schema-registry
           - mvn install -f extensions/mailer
           - mvn install -f extensions/mutiny
           - mvn install -f extensions/netty
