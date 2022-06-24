@@ -8,7 +8,7 @@ pipelines:
   - name: smallrye
     steps:
       - repository: cescoffier/smallrye-mutiny-vertx-bindings
-        branchOrCommit: vertx-4.3
+        branchOrCommit: vertx-4.3.1
         commands:
           - mvn clean install
         dependencies:
@@ -34,8 +34,8 @@ pipelines:
         dependencies:
           vertx.version: eclipse-vertx/vert.x
 
-      - repository: quarkusio/quarkus
-        branchOrCommit: main
+      - repository: cescoffier/quarkus
+        branchOrCommit: vertx-4.3.1-take-2
         version: 999-SNAPSHOT
         dependencies:
           vertx.version: eclipse-vertx/vert.x
